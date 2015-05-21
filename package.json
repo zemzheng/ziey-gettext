@@ -1,0 +1,23 @@
+{
+  "name": "ziey-gettext",
+  "version": "0.5.0",
+  "description": "gettext in javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zemzheng/ziey-gettext.git"
+  },
+  "keywords": [
+    "gnu",
+    "gettext"
+  ],
+  "author": "Zem Zheng (zemzheng@gmail.com)",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/zemzheng/ziey-gettext/issues"
+  },
+  "homepage": "https://github.com/zemzheng/ziey-gettext"
+}
