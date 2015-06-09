@@ -32,7 +32,7 @@ function po2obj( text ){
                     str       : obj.msgstr
                 }
             }
-            match = current = obj.msgid = obj.msgstr = '';
+            current = obj.msgid = obj.msgstr = '';
             obj.reference = {};
         };
     getObj();
