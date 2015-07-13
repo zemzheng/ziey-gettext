@@ -81,5 +81,19 @@ describe( 'gettext', function(){
             )
         );
     } );
+
+    it( 'updateCurrentDict - 不存在的词条需要加入', function(){
+        var lang = 'lang-' + ( +new Date ),
+            key = 'key-' + (+new Date ),
+            opts = {
+                str : 'opts-str-' + (+ new Date )
+            };
+        gettext.setLang( lang );
+        gettext.updateCurrentDict( key, opts );
+        assert.equal(
+            opts.str,
+            gettext.getDictByLang( lang )[ key ].str
+        );
+    } );
 } );
 
