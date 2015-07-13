@@ -120,13 +120,15 @@ function getLang(){ return c_lang; }
 function setLang( lang ){
     if( lang in DICT ){
         c_dict = getDictByLang( lang );
+    } else {
+        c_dict = DICT[lang] = {};
     }
 }
 
 function updateCurrentDict( id, opts ){
     var item;
     if( !( item = c_dict[ id ] ) ){
-        item = {
+        item = c_dict[ id ] = {
             str : '',
             reference : {}
         }
