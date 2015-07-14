@@ -18,7 +18,7 @@ var c_lang,
     c_dict;
 
 function po2obj( text ){
-    text = text.split( /[\r\n]/g );
+    text = text.split( /[\r\n]+/g );
     var line, 
         m, c, 
         match, current,

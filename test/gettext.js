@@ -1,5 +1,7 @@
 var assert = require("assert");
 var gettext = require( '../index.js' );
+var fs = require( 'fs' );
+var path = require( 'path' );
 
 describe( 'gettext', function(){
     var obj = {
@@ -40,6 +42,25 @@ describe( 'gettext', function(){
             JSON.stringify( 
                 gettext.po2obj( po )
             )
+        );
+    } );
+
+    it( 'load po from file', function(){
+        var lang = 'lang',
+            po_path = path.join( __dirname, 'lang.po' );
+        gettext.handlePo( lang, po_path );
+        gettext.setLang( lang );
+        assert.equal(
+            gettext._( '1.现网更新' ),
+            '1.Release online'
+        );
+        assert.equal(
+            gettext._( '2.点击查看更多' ),
+            '2.Click to see "More"'
+        );
+        assert.equal(
+            gettext._( '3.他是我们的编辑人员' ),
+            "3.He's our editor"
         );
     } );
 
