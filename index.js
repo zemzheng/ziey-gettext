@@ -64,20 +64,14 @@ function po2obj( text ){
     return result;
 }
 
-function obj2po( obj, header ){
-    var potxt = [
-            'msgid ""',
-            'msgstr ""',
-            '"MIME-Version: 1.0\\n"',
-            '"Content-Type: text/plain; charset=UTF-8\\n"',
-            '"Content-Transfer-Encoding: 8bit\\n"'
-        ].concat( header || [] ).join('\n'),
-        pobody = [],
+function obj2po( obj ){
+    var potxt = module.exports.HEADER,
+        list = [],
         item,
         key;
     for (key in obj) {
         item = obj[ key ];
-        pobody.push( (function(){
+        list.push( (function(){
             var list = (function( reference ){
                     var result = [], key, prefix = "\n#: ";
                     if( !reference ) return result;
@@ -87,15 +81,24 @@ function obj2po( obj, header ){
                     result.sort();
                     return prefix + result.join( prefix );
                 })( item.reference );
-            return [
+            return {
+                index : key,
+                content : [
                     list,
                     'msgid '  + JSON.stringify( key ),
                     'msgstr ' + ( item.str ? JSON.stringify( item.str ) : '""' ),
                     ''
                 ].join( "\n" )
+            };
         })() );
     }
-    pobody.sort();
+
+    var pobody = [];
+    list.sort( function( a, b ){
+        return a.index > b.index ? 1 : -1;
+    } ).forEach( function( item ){
+        pobody.push( item.content );
+    } );
 
     return potxt + '\n' + pobody.join( '\n' );
 
@@ -127,6 +130,7 @@ function setLang( lang ){
 
 function updateCurrentDict( id, opts ){
     var item;
+    opts = opts || {};
     if( !( item = c_dict[ id ] ) ){
         item = c_dict[ id ] = {
             str : '',
@@ -144,6 +148,14 @@ function _( str ){
 }
 
 module.exports = {
+    HEADER : [
+        'msgid ""',
+        'msgstr ""',
+        '"MIME-Version: 1.0\\n"',
+        '"Content-Type: text/plain; charset=UTF-8\\n"',
+        '"Content-Transfer-Encoding: 8bit\\n"'
+    ].join('\n'),
+
     handlePo      : handlePo,
     handlePoTxt   : handlePoTxt,
 

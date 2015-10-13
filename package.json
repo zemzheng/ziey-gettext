@@ -1,6 +1,6 @@
 {
   "name": "ziey-gettext",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "gettext in javascript",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,8 @@
     "url": "https://github.com/zemzheng/ziey-gettext/issues"
   },
   "homepage": "https://github.com/zemzheng/ziey-gettext",
-  "dependencies": {
-    "mocha": "^2.2.5"
+  "devDependencies": {
+    "should": "^7.0.2",
+    "mocha": "^2.3.3"
   }
 }

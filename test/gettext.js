@@ -10,19 +10,17 @@ describe( 'gettext', function(){
             z : { "reference":{}, str : '\\z' }
         },
         po = [
-            'msgid ""',
-            'msgstr ""',
-            '"MIME-Version: 1.0\\n"',
-            '"Content-Type: text/plain; charset=UTF-8\\n"',
-            '"Content-Transfer-Encoding: 8bit\\n"',
+            gettext.HEADER,
             '',
             '#:',
             'msgid "a"',
             'msgstr "A"',
             '',
+            '',
             '#:',
             'msgid "b"',
             'msgstr "B"',
+            '',
             '',
             '#:',
             'msgid "z"',
@@ -36,6 +34,42 @@ describe( 'gettext', function(){
             JSON.stringify( gettext.po2obj( gettext.obj2po( obj ) ) )
         );
     } );
+
+    it( 'obj2po - 按照 msgid 排序', function(){
+        var lang = 'lang' + ( +new Date );
+        gettext.handlePoTxt( lang, '' );
+        gettext.setLang( lang );
+
+        gettext.updateCurrentDict( 'c' );
+        gettext.updateCurrentDict( 'b' );
+        gettext.updateCurrentDict( 'a' );
+        gettext.updateCurrentDict( 'a', { reference : 'c' } );
+        gettext.updateCurrentDict( 'a', { reference : 'b' } );
+        gettext.updateCurrentDict( 'c', { reference : 'a' } );
+        assert.equal(
+            gettext.obj2po( gettext.getDictByLang( lang ) ),
+            [
+                gettext.HEADER,
+                '',
+                '#: b',
+                '#: c',
+                'msgid "a"',
+                'msgstr ""',
+                '',
+                '',
+                '#: ',
+                'msgid "b"',
+                'msgstr ""',
+                '',
+                '',
+                '#: a',
+                'msgid "c"',
+                'msgstr ""',
+                ''
+            ].join( '\n' )
+        );
+    } );
+
     it( 'po2obj', function(){
         assert.equal(
             JSON.stringify( obj ),
@@ -72,7 +106,8 @@ describe( 'gettext', function(){
             po = [
                 'msgid "a"',
                 'msgstr "A"',
-                '','',
+                '',
+                '',
                 'msgid "b"',
                 'msgstr "B"',
             ].join( '\n' );
