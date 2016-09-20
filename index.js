@@ -79,7 +79,7 @@ function obj2po( obj ){
                         result.push( key );
                     }
                     result.sort();
-                    return prefix + result.join( prefix );
+                    return result.length ? prefix + result.join( prefix ) : ''
                 })( item.reference );
             return {
                 index : key,
@@ -142,6 +142,12 @@ function updateCurrentDict( id, opts ){
     opts.reference && ( item.reference[ opts.reference ] = 1 );
 }
 
+function cleanCurrentDictReference(){
+    Object.keys( c_dict ).forEach( function( key ){
+        c_dict[ key ].reference = {};
+    } );
+}
+
 function _( str ){
     var item = c_dict[ str ];
     return ( item && item.str ) ? item.str : str;
@@ -163,9 +169,10 @@ module.exports = {
     gettext       : _,
     clear         : function() { dict = {}; c_dict = null; },
 
-    setLang           : setLang,
-    getDictByLang     : getDictByLang,
-    updateCurrentDict : updateCurrentDict,
+    setLang                   : setLang,
+    getDictByLang             : getDictByLang,
+    updateCurrentDict         : updateCurrentDict,
+    cleanCurrentDictReference : cleanCurrentDictReference,
 
     po2obj        : po2obj,
     obj2po        : obj2po

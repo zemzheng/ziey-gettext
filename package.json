@@ -1,10 +1,10 @@
 {
   "name": "ziey-gettext",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "gettext in javascript",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "node ./node_modules/mocha/bin/mocha"
   },
   "repository": {
     "type": "git",

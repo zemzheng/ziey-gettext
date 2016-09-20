@@ -16,6 +16,21 @@ i18n tool, gnu gettext
 
     var gettext = require( 'ziey-i18n' );
 
+### gettext.getLang
+
+    /**
+     * @return {string}   # 当前语言
+     */
+    gettext.getLang()
+
+### gettext.setLang
+
+    /**
+     * @param {string} lang         # 设置当前语言，Exp: zh_CN, en_US ...
+     * @return {string}             # 当前语言
+     */
+    gettext.setLang( lang )
+
 ### gettext.handlePo
 
     /**
@@ -49,6 +64,23 @@ i18n tool, gnu gettext
      * @description 清空翻译词条
      */
     gettext.clear()
+
+### gettext.updateCurrentDict
+
+    /**
+     * @param {string} msgid             # 词条原文，新增或者更新现有词典
+     * @param {object} opts              # 更新明细
+     * @param {string} opts.str          # 词条译文
+     * @param {reference} opts.reference # 词条来源
+     */
+    gettext.updateCurrentDict( msgid, opts )
+
+### gettext.cleanCurrentDictReference
+
+    /**
+     * @description 清空当前词典中的来源
+     */
+    gettext.cleanCurrentDictReference()
 
 ### gettext.po2obj
 

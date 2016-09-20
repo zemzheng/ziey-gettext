@@ -57,12 +57,45 @@ describe( 'gettext', function(){
                 'msgstr ""',
                 '',
                 '',
-                '#: ',
                 'msgid "b"',
                 'msgstr ""',
                 '',
                 '',
                 '#: a',
+                'msgid "c"',
+                'msgstr ""',
+                ''
+            ].join( '\n' )
+        );
+    } );
+
+    it( 'cleanCurrentDictReference - 清理掉 reference', function(){
+        var lang = 'lang' + ( +new Date );
+        gettext.handlePoTxt( lang, '' );
+        gettext.setLang( lang );
+
+        gettext.updateCurrentDict( 'c' );
+        gettext.updateCurrentDict( 'b' );
+        gettext.updateCurrentDict( 'a' );
+        gettext.updateCurrentDict( 'a', { reference : 'c' } );
+        gettext.updateCurrentDict( 'a', { reference : 'b' } );
+        gettext.updateCurrentDict( 'c', { reference : 'a' } );
+
+        gettext.cleanCurrentDictReference();
+
+        assert.equal(
+            gettext.obj2po( gettext.getDictByLang( lang ) ),
+            [
+                gettext.HEADER,
+                '',
+                'msgid "a"',
+                'msgstr ""',
+                '',
+                '',
+                'msgid "b"',
+                'msgstr ""',
+                '',
+                '',
                 'msgid "c"',
                 'msgstr ""',
                 ''
