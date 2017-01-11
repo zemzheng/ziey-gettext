@@ -184,5 +184,41 @@ describe( 'gettext', function(){
             gettext.getDictByLang( lang )[ key ].str
         );
     } );
+
+    it( 'clearCurrentDictEmptyItem - 清空当前词典中的空词条', function(){
+        var lang = 'lang-' + ( +new Date ),
+            obj = {
+                a : { "reference":{}, str : "A" },
+                b : { "reference":{}, str : 'B' }
+            },
+            po = [
+                'msgid "a"',
+                'msgstr "A"',
+                'msgid "b"',
+                'msgstr ""',
+            ].join( '\n' );
+
+        gettext.handlePoTxt( lang, po );
+        gettext.setLang( lang );
+        gettext.clearCurrentDictEmptyItem();
+        assert.equal(
+            JSON.stringify( { "reference":{}, str : "A" } ),
+            JSON.stringify(
+                gettext.getDictByLang( lang ).a
+            )
+        );
+        assert.equal(
+            undefined,
+            JSON.stringify(
+                gettext.getDictByLang( lang ).b
+            )
+        );
+        assert.equal(
+            undefined,
+            JSON.stringify(
+                gettext.getDictByLang( lang ).c
+            )
+        );
+    } );
 } );
 

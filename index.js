@@ -148,6 +148,14 @@ function cleanCurrentDictReference(){
     } );
 }
 
+function clearCurrentDictEmptyItem(){
+    Object.keys( c_dict ).forEach( function( key ){
+        if( !c_dict[ key ].str ){
+            delete c_dict[ key ];
+        }
+    } );
+}
+
 function _( str ){
     var item = c_dict[ str ];
     return ( item && item.str ) ? item.str : str;
@@ -173,6 +181,7 @@ module.exports = {
     getDictByLang             : getDictByLang,
     updateCurrentDict         : updateCurrentDict,
     cleanCurrentDictReference : cleanCurrentDictReference,
+    clearCurrentDictEmptyItem : clearCurrentDictEmptyItem,
 
     po2obj        : po2obj,
     obj2po        : obj2po

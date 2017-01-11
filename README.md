@@ -82,6 +82,13 @@ i18n tool, gnu gettext
      */
     gettext.cleanCurrentDictReference()
 
+### gettext.clearCurrentDictEmptyItem
+
+    /**
+     * @description 清空当前词典中的空词条
+     */
+    gettext.cleanCurrentDictReference()
+
 ### gettext.po2obj
 
     /**
