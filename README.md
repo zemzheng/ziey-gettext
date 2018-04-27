@@ -14,7 +14,7 @@ i18n tool, gnu gettext
 
 ## Usage
 
-    var gettext = require( 'ziey-i18n' );
+    var gettext = require( 'ziey-gettext' );
 
 ### gettext.getLang
 
