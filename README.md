@@ -82,12 +82,23 @@ i18n tool, gnu gettext
      */
     gettext.cleanCurrentDictReference()
 
-### gettext.clearCurrentDictEmptyItem
+### gettext.clearCurrentDictEmptyItem [Discard]
 
     /**
-     * @description 清空当前词典中的空词条
+     * @description 清空当前词典中的空词条 （废弃）
+     *              建议使用 clearDict
      */
-    gettext.cleanCurrentDictReference()
+    gettext.clearCurrentDictEmptyItem()
+
+### gettext.clearDict
+
+    /**
+     * @description 清理字典
+     * @param {boolean} options.str 是否要根据 str 为空来清理
+     * @param {boolean} options.reference 是否要根据 reference 为空来清理
+     * @param {string} options.lang? 指定语言，默认为当前选中语言
+     */
+    gettext.clearDict()
 
 ### gettext.po2obj
 

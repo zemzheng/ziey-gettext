@@ -1,6 +1,6 @@
 {
   "name": "ziey-gettext",
-  "version": "0.6.5",
+  "version": "0.7.0",
   "description": "gettext in javascript",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,7 @@
     "gettext"
   ],
   "author": "Zem Zheng (zemzheng@gmail.com)",
-  "license": "GPL",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/zemzheng/ziey-gettext/issues"
   },

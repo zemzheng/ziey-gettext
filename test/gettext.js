@@ -220,5 +220,32 @@ describe( 'gettext', function(){
             )
         );
     } );
+    it( 'clearDict - 清空词典', function(){
+        var lang = 'lang-' + ( +new Date ),
+            obj = {
+                a : { "reference":{}, str : "A" },
+                b : { "reference":{}, str : '' }
+            },
+            po = [
+                'msgid "a"',
+                'msgstr "A"',
+                'msgid "b"',
+                'msgstr ""',
+            ].join( '\n' );
+
+        gettext.handlePoTxt( lang, po );
+        gettext.setLang( lang );
+
+        gettext.clearDict({ str : true });
+        assert.equal(
+            Object.keys( obj ).filter( key => obj[key].str ).length,
+            Object.keys( gettext.getDictByLang(lang) ).length
+        );
+        gettext.clearDict({ reference : true });
+        assert.equal(
+            0,
+            Object.keys( gettext.getDictByLang(lang) ).length
+        );
+    });
 } );
 

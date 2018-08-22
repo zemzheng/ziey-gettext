@@ -121,6 +121,7 @@ function getDictByLang( lang ){
 
 function getLang(){ return c_lang; }
 function setLang( lang ){
+    c_lang = lang;
     if( lang in DICT ){
         c_dict = getDictByLang( lang );
     } else {
@@ -148,12 +149,20 @@ function cleanCurrentDictReference(){
     } );
 }
 
-function clearCurrentDictEmptyItem(){
-    Object.keys( c_dict ).forEach( function( key ){
-        if( !c_dict[ key ].str ){
-            delete c_dict[ key ];
+function clearDict({ lang = c_lang, str, reference } = {}){
+    const target = DICT[lang] || {};
+    Object.keys(target).forEach( key => {
+        const item = target[key];
+        switch(true){
+            case str && !item.str:
+            case reference && !Object.keys(item.reference).length:
+                delete target[key];
         }
-    } );
+    });
+}
+
+function clearCurrentDictEmptyItem(){
+    clearDict({ str : true });
 }
 
 function _( str ){
@@ -182,6 +191,7 @@ module.exports = {
     updateCurrentDict         : updateCurrentDict,
     cleanCurrentDictReference : cleanCurrentDictReference,
     clearCurrentDictEmptyItem : clearCurrentDictEmptyItem,
+    clearDict,
 
     po2obj        : po2obj,
     obj2po        : obj2po
