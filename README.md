@@ -8,6 +8,8 @@ i18n tool, gnu gettext
 2. load po format file
 3. save to po format file
 
+* node version: 8+
+
 ## Install
 
     npm install ziey-gettext
