@@ -1,6 +1,6 @@
 {
   "name": "ziey-gettext",
-  "version": "0.7.0",
+  "version": "0.7.1-0",
   "description": "gettext in javascript",
   "main": "index.js",
   "scripts": {
