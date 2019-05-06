@@ -18,51 +18,80 @@ var c_lang,
     c_dict;
 
 function po2obj( text ){
-    text = text.split( /[\r\n]+/g );
-    var line, 
-        m, c, 
-        match, current,
-        temp,
-        obj = {},
-        result = {},
-        getObj = function(){
-            if( obj.msgid ){
-                result[ obj.msgid ] = {
-                    reference : obj.reference,
-                    str       : obj.msgstr
-                }
-            }
-            current = obj.msgid = obj.msgstr = '';
-            obj.reference = {};
-        };
-    getObj();
-    while( text.length ){
-        // 清理空行
-        line = text.shift().replace( /^\s*|\s*$/g, '' );
-
-        if( match = line.match( /^#:\s+(.+)$/ ) ){
-            // 注释，引用的文件
-            obj.reference[ match[1] ] = 1;
-        } else if( match = line.match( /^(msgid|msgstr)\s+(".*")$/ ) ){
-            // 匹配到 msgid 或者 msgstr
-            if( "msgid" == match[1] && "msgstr" == current ){
-                // 遇到新的 msgid，先收尾
-                getObj();
-            }
-            // 获取内容，该转义转义
-            obj[ match[1] ] = JSON.parse( '{"' + match[1] + '" : ' + match[2] + '}' )[ match[1] ];
-            // 打个标志
-            current = match[1];
-        } else if( ( match = line.match( /^(".+")$/ ) ) && current ){
-            // 换行
-           obj[ current ]  += JSON.parse( '{"content" : ' + match[1] + '}' )[ "content" ];
-        } else {
-            getObj();
-        }
+    function parseContentStr(str){
+        return JSON.parse(`{"content":${str}}`).content;
     }
-    getObj();
+    const result = {};
+    let isInMsgStr; // 是否已经进入 msgstr 阶段
+    let obj; // 当前在处理的对象
+
+    // #:<file>          // 注释，可选内容
+    // msgid "<msgid>"   // 词条
+    // "<msgid>"         // 接上一句，可选内容
+    // msgstr "<msgstr>" // 翻译
+    // "<msgstr>"        // 接上一句，可选内容
+
+    function newObj(){
+        if(obj && obj.msgid){
+            const { reference = {}, msgid, msgstr = '' } = obj;
+            result[msgid] = {
+                reference,
+                str: msgstr
+            };
+        }
+        obj = {
+            msgid: '',
+            msgstr: '',
+            reference: {},
+        };
+        isInMsgStr = false;
+    }
+
+    newObj();
+    text.split( /[\r\n]+/g ).forEach( (oneLine) => {
+        const line = oneLine.replace( /^\s*|\s*$/g, '' );
+        switch(true){
+            case /^#:/.test(line): {
+                // 注释
+                const [_all, file] = line.match( /^#:\s*(.*)$/ );
+                if(isInMsgStr){
+                    // 之前已经进入 msgstr，遇到新的注释要收集数据
+                    newObj();
+                }
+                if(file){
+                    obj.reference[file] = 1;
+                }
+                break;
+            }
+            case /^(msgid|msgstr)/.test(line):{
+                // 内容
+                const [_all, msgtype, content] = line.match( /^(msgid|msgstr)\s+(".*")$/ );
+                currentType = msgtype;
+                if('msgstr' === currentType){
+                    // 当开始进入 msgstr，翻牌准备收数据
+                    isInMsgStr = true;
+                } else if(isInMsgStr){
+                    // 之前已经进入 msgstr，遇到新的 msgid 要收集数据
+                    newObj();
+                }
+                obj[msgtype] = parseContentStr(content);
+                break;
+            }
+            case /^(".+")$/.test(line):{
+                // 继续上一行
+                const [all, content] = line.match( /^(".+")$/ )
+                obj[currentType] = parseContentStr(content);
+                break;
+            }
+            default: {
+                // ignore
+            }
+        }
+    });
+    newObj();
     return result;
 }
+
 
 function obj2po( obj ){
     var potxt = module.exports.HEADER,
