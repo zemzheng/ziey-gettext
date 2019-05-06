@@ -5,29 +5,28 @@ var path = require( 'path' );
 
 describe( 'gettext', function(){
     var obj = {
-            a : { "reference":{}, str : "A" },
-            b : { "reference":{}, str : 'B' },
+            a : { "reference":{a:1, b:1}, str : "A" },
+            b : { "reference":{c:1}, str : 'B' },
             z : { "reference":{}, str : '\\z' }
         },
         po = [
             gettext.HEADER,
             '',
-            '#:',
+            '#: a',
+            '#: b',
             'msgid "a"',
             'msgstr "A"',
             '',
             '',
-            '#:',
+            '#:c',
             'msgid "b"',
             'msgstr "B"',
             '',
-            '',
-            '#:',
             'msgid "z"',
             'msgstr "\\\\z"',
             ''
         ].join( '\n' );
-    
+
     it( 'obj2po', function(){
         assert.equal(
             JSON.stringify( gettext.po2obj( po ) ),
@@ -106,7 +105,7 @@ describe( 'gettext', function(){
     it( 'po2obj', function(){
         assert.equal(
             JSON.stringify( obj ),
-            JSON.stringify( 
+            JSON.stringify(
                 gettext.po2obj( po )
             )
         );
@@ -146,7 +145,7 @@ describe( 'gettext', function(){
             ].join( '\n' );
         assert.equal(
             JSON.stringify( obj ),
-            JSON.stringify( 
+            JSON.stringify(
                 gettext.po2obj( po )
             )
         );
@@ -163,9 +162,9 @@ describe( 'gettext', function(){
                 'msgid "b"',
                 'msgstr "B"',
             ].join( '\n' );
-        assert.equal( 
+        assert.equal(
             JSON.stringify( obj ),
-            JSON.stringify( 
+            JSON.stringify(
                 gettext.po2obj( po )
             )
         );
@@ -248,4 +247,3 @@ describe( 'gettext', function(){
         );
     });
 } );
-
